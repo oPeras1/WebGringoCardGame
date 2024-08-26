@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Game Lobby</title>
+    <script>
+        let token = null;
+        let ws = null;
+        let lobbyName = null;
+
+        async function setUsername() {
+            const username = document.getElementById('username').value;
+            const response = await fetch(`http://gringo.operas.pt:8000/setUsername?username=${encodeURIComponent(username)}&id=1`, {
+                method: 'POST'
+            });
+            const data = await response.json();
+            token = data.token;
+            alert('Username set successfully!');
+        }
+
+        async function createLobby() {
+            if (!token) {
+                alert('Please set your username first.');
+                return;
+            }
+            const response = await fetch(`http://gringo.operas.pt:8000/createLobby?token=${encodeURIComponent(token)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+
+            if (data.lobbyname) {
+                lobbyName = data.lobbyname;
+                alert(`Lobby created successfully! Lobby name: ${data.lobbyname}`);
+                connectWebSocket(data.lobbyname);
+            } else {
+                alert('Failed to create lobby.');
+            }
+        }
+
+        async function joinLobby() {
+            if (!token) {
+                alert('Please set your username first.');
+                return;
+            }
+            lobbyName = document.getElementById('lobbyName').value;
+            const response = await fetch(`http://gringo.operas.pt:8000/joinLobby?token=${encodeURIComponent(token)}&lobbyname=${encodeURIComponent(lobbyName)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            if (data.status === 'Joined') {
+                alert('Joined lobby successfully!');
+                connectWebSocket(lobbyName);
+            } else {
+                alert('Failed to join lobby.');
+            }
+        }
+
+        async function readyLobby() {
+            if (!token) {
+                alert('Please set your username first.');
+                return;
+            }
+            const response = await fetch(`http://gringo.operas.pt:8000/readyLobby?token=${encodeURIComponent(token)}&lobbyname=${encodeURIComponent(lobbyName)}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+            const data = await response.json();
+            if (data.readystate === True) {
+                alert('Ready successfully!');
+            } else {
+                alert('Unready successfully!');
+            }
+        }
+
+        function connectWebSocket(lobbyName) {
+            if (ws) {
+                ws.close();
+            }
+            ws = new WebSocket(`ws://gringo.operas.pt:8000/ws/${lobbyName}/${token}`);
+
+            ws.onopen = () => {
+                console.log('Connected to lobby');
+                document.getElementById('status').innerText = `Connected to lobby: ${lobbyName}`;
+            };
+
+            ws.onmessage = (event) => {
+                console.log('Received:', event.data);
+                document.getElementById('messages').innerText += event.data + '\n';
+            };
+
+            ws.onclose = () => {
+                console.log('Disconnected from lobby');
+                document.getElementById('status').innerText = `Disconnected from lobby: ${lobbyName}`;
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+        }
+    </script>
+</head>
+<body>
+    <h1>Card Game Lobby</h1>
+    <div>
+        <input type="text" id="username" placeholder="Enter Username">
+        <button onclick="setUsername()">Set Username</button>
+    </div>
+    <div>
+        <input type="text" id="lobbyName" placeholder="Enter Lobby Name">
+        <button onclick="createLobby()">Create Lobby</button>
+        <button onclick="joinLobby()">Join Lobby</button>
+    </div>
+    <div>
+        <button onclick="readyLobby()">Ready/Unready</button>
+    <div>
+        <h2>Status:</h2>
+        <div id="status">Not connected</div>
+    </div>
+    <div>
+        <h2>Messages:</h2>
+        <pre id="messages"></pre>
+    </div>
+</body>
+</html>
