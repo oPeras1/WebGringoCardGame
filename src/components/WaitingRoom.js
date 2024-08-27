@@ -44,7 +44,9 @@ const Waiting = () => {
         setWs(socket);
 
         return () => {
-            socket.close();
+            if (socket.readyState === WebSocket.OPEN) {
+                socket.close();
+            }
         };
     }, [roomID, token]);
 
