@@ -1,0 +1,68 @@
+.lobby-info-card {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.lobby-header h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333;
+    text-align: center;
+}
+
+.lobby-header h2 {
+    font-size: 16px;
+    color: #777;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.players-list {
+    margin-top: 20px;
+}
+
+.player-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.player-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.player-name {
+    flex-grow: 1;
+    font-size: 18px;
+    color: #333;
+}
+
+.action-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+
+.action-button:hover .action-icon {
+    transform: scale(1.1);
+}
+
+.action-icon {
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+}
