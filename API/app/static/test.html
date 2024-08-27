@@ -11,7 +11,7 @@
 
         async function setUsername() {
             const username = document.getElementById('username').value;
-            const response = await fetch(`http://gringo.operas.pt:8000/setUsername?username=${encodeURIComponent(username)}&id=1`, {
+            const response = await fetch(`http://192.168.32.219:8000/setUsername?username=${encodeURIComponent(username)}&id=1`, {
                 method: 'POST'
             });
             const data = await response.json();
@@ -24,7 +24,7 @@
                 alert('Please set your username first.');
                 return;
             }
-            const response = await fetch(`http://gringo.operas.pt:8000/createLobby?token=${encodeURIComponent(token)}`, {
+            const response = await fetch(`http://192.168.32.219:8000/createLobby?token=${encodeURIComponent(token)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,7 +48,7 @@
                 return;
             }
             lobbyName = document.getElementById('lobbyName').value;
-            const response = await fetch(`http://gringo.operas.pt:8000/joinLobby?token=${encodeURIComponent(token)}&lobbyname=${encodeURIComponent(lobbyName)}`, {
+            const response = await fetch(`http://192.168.32.219:8000/joinLobby?token=${encodeURIComponent(token)}&lobbyname=${encodeURIComponent(lobbyName)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -69,7 +69,7 @@
                 alert('Please set your username first.');
                 return;
             }
-            const response = await fetch(`http://gringo.operas.pt:8000/readyLobby?token=${encodeURIComponent(token)}&lobbyname=${encodeURIComponent(lobbyName)}`, {
+            const response = await fetch(`http://192.168.32.219:8000/readyLobby?token=${encodeURIComponent(token)}&lobbyname=${encodeURIComponent(lobbyName)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -88,7 +88,7 @@
             if (ws) {
                 ws.close();
             }
-            ws = new WebSocket(`ws://gringo.operas.pt:8000/ws/${lobbyName}/${token}`);
+            ws = new WebSocket(`ws://192.168.32.219:8000/ws/${lobbyName}/${token}`);
 
             ws.onopen = () => {
                 console.log('Connected to lobby');

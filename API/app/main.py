@@ -206,6 +206,7 @@ async def kickLobby(token: str, lobbyname: str, username: str):
         
         await lobby["connections"][username].close()
         # Notify all players in the lobby
+        print("kick")
         await sendListPlayers(lobbyname)
 
     return {"status": "Kicked"}
@@ -287,7 +288,8 @@ async def websocket_endpoint(websocket: WebSocket, lobbycode: str, token: str):
 
     lobby = lobbies[lobbycode]
     lobby["connections"][user] = websocket
-
+    
+    print("ws")
     await sendListPlayers(lobbycode)
 
     try:
@@ -299,14 +301,15 @@ async def websocket_endpoint(websocket: WebSocket, lobbycode: str, token: str):
             del lobby["connections"][user]
             if lobby["owner"] == user:
                 # If the owner leaves, close the lobby
-                for player in lobby["players"]:
+                for player in list(lobby["players"]):
                     if player in lobby["connections"]:
                         await lobby["connections"][player].close()
                 del lobbies[lobbycode]
-            if user in lobby["players"]:
+            elif user in lobby["players"]:
                 del lobby["players"][user]
                 
                 # Notify all players in the lobby
+                print("saiu")
                 await sendListPlayers(lobbycode)
 
 async def notify_lobby(lobby_name: str, message: str):
