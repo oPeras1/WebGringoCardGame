@@ -1,0 +1,213 @@
+.home-form-container {
+    display: flex;
+    justify-content: center;
+}
+
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1; 
+}
+
+@keyframes moveUpDown {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.home-form {
+    color: white;
+    position: relative;
+    z-index: 1;
+    width: 700px;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    flex-direction: column; 
+    margin: 150px auto;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    animation: moveUpDown 5s infinite ease-in-out;
+}
+
+.titjogo {
+    font-size: 80px;
+    font-weight: 700;
+    margin-top: 20px;
+    letter-spacing: 10px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    margin-bottom: 30px;
+}
+
+.profile-container {
+    position: relative;
+    display: inline-block;
+    width: 180px;
+    height: 180px;
+    justify-content: center;
+    align-items: center;
+}
+  
+.profile {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+.switch-button {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    bottom: 5px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+    background-color: #ff6347;
+    color: #fff;
+    padding-bottom: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.switch-button:hover {
+    background-color: #e2533a;
+}
+
+.nome-container {
+    margin-top: 30px;
+    display: inline-block;
+    
+}
+
+.nome-txt {
+    flex: 1;
+    font-size: 16px;
+    padding: 12px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #e0e0e0, #ffffff);
+    background-clip: padding-box; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    outline: none;
+    margin-right: 10px;
+    width: 60%;
+}
+  
+.nome-txt:focus {
+    border-color: #ff6f61;
+    box-shadow: 0 0 10px rgba(255, 111, 97, 0.5); 
+}
+  
+.nome-btn {
+    font-size: 16px;
+    padding: 12px 24px;
+    color: #ffffff;
+    background: #ff6f61; 
+    border-radius: 12px; 
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border: none;
+    font-weight: bold;
+}
+  
+  
+.nome-btn:hover {
+    background: #d63f3f; /* Inverte as cores ao passar o mouse */
+}
+
+
+/* Estilo general para el contenedor del lobby */
+.lobby-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  min-width: 298px;
+  box-sizing: border-box;
+}
+
+/* Estilo para el botón de crear lobby */
+.create-btn {
+  background-color: #4CAF50; /* Verde moderno */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 35%;
+  padding-right: 35%;
+}
+
+.create-btn:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+/* Contenedor para el botón de unirse al lobby y el campo de texto */
+.join-lobby-container {
+  display: flex;
+  align-items: center;
+  min-width: 298px;
+}
+
+/* Estilo para el campo de texto */
+.lobby-txt {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 23px;
+  width: 200px;
+  margin-right: 10px;
+  outline: none;
+  width: 100px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.lobby-txt:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 8px rgba(76,175,80,0.5);
+}
+
+/* Estilo para el botón de unirse al lobby */
+.join-btn {
+  background-color: #2196F3; /* Azul moderno */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding-top: 15.5px;
+  padding-bottom: 15px;
+  padding-left: 30px;
+  padding-right: 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  width: 180px;
+}
+
+.join-btn:hover {
+  background-color: #1976D2;
+  transform: translateY(-2px);
+}
