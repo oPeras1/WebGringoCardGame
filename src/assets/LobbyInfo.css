@@ -52,12 +52,11 @@
     background: none;
     border: none;
     padding: 0;
-    margin-left: 10px;
     cursor: pointer;
     transition: transform 0.5s ease;
 }
 
-.action-button:hover .action-icon {
+.action-button:hover {
     transform: scale(1.1);
 }
 

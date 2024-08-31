@@ -42,6 +42,24 @@ const LobbyInfo = ({ roomID, players }) => {
         }
     }
 
+    const handleReady = async () => {
+        const response = await fetch(`http://192.168.32.219:8000/readyLobby?token=${localStorage.getItem("token")}&lobbyname=${roomID}`, {
+            method: 'POST'
+        });
+
+        if (response.status === 404) {
+            alert("Lobby not found")
+        }
+
+        else if (response.status === 401) {
+            alert("Not enough players in the lobby")
+        }
+
+        if (response.status !== 200) {
+            alert("Error!")
+        }
+    }
+
     return (
         <div className="lobby-info-card">
             <div className="lobby-header">
@@ -58,7 +76,7 @@ const LobbyInfo = ({ roomID, players }) => {
                                 <img src={readyornot[2]} alt="Icon 1" className="action-icon" />
                             </button>
                         ) : null}
-                        <img src={player.ready ? readyornot[0] : readyornot[1]} alt="Icon 2" className="action-icon" />
+                        <img src={player.ready ? readyornot[0] : readyornot[1]} alt="Icon 2" className="action-icon" onClick={handleReady}/>
                     </div>
                 ))}
             </div>

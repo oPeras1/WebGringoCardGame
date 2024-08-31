@@ -32,8 +32,12 @@ const Waiting = () => {
             const data = JSON.parse(event.data)
 
             if (data.id === 1) { 
-                setPlayers(data.players)
+                const dataplayers = data.players
+                const dataready = data.ready
+
+                setPlayers(dataplayers)
             }
+
             setMessages((prevMessages) => [...prevMessages, event.data]);
         };
 
