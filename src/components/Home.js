@@ -32,7 +32,7 @@ const Home = () => {
 
     const handleClickName = async () => {
         if (username.length > 0) {
-            const response = await fetch(`http://192.168.32.219:8000/setUsername?username=${encodeURIComponent(username)}&id=${userpf}`, {
+            const response = await fetch(`http://gringo.operas.pt:8000/setUsername?username=${encodeURIComponent(username)}&id=${userpf}`, {
                 method: 'POST'
             });
 
@@ -52,7 +52,7 @@ const Home = () => {
     }
 
     const handleClickCreate = async () => {
-        const response = await fetch(`http://192.168.32.219:8000/createLobby?token=${localStorage.getItem("token")}`, {
+        const response = await fetch(`http://gringo.operas.pt:8000/createLobby?token=${localStorage.getItem("token")}`, {
             method: 'POST'
         });
 
@@ -70,7 +70,7 @@ const Home = () => {
 
     const handleLobbyName = async () => {
         if (lobbyname.length > 0) {
-            const response = await fetch(`http://192.168.32.219:8000/joinLobby?token=${localStorage.getItem("token")}&lobbyname=${lobbyname.toUpperCase()}`, {
+            const response = await fetch(`http://gringo.operas.pt:8000/joinLobby?token=${localStorage.getItem("token")}&lobbyname=${lobbyname.toUpperCase()}`, {
                 method: 'POST'
             });
         

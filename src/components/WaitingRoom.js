@@ -21,7 +21,7 @@ const Waiting = () => {
             ws.close();
         }
         
-        const socket = new WebSocket(`ws://192.168.32.219:8000/ws/${roomID}/${token}`);
+        const socket = new WebSocket(`ws://gringo.operas.pt:8000/ws/${roomID}/${token}`);
 
         socket.onopen = () => {
             console.log('Connected to WebSocket');

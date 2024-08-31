@@ -33,7 +33,7 @@ const LobbyInfo = ({ roomID, players }) => {
     const admin = isAdmin(players)
 
     const handleKick = async (name) => {
-        const response = await fetch(`http://192.168.32.219:8000/kickLobby?token=${localStorage.getItem("token")}&lobbyname=${roomID}&username=${name}`, {
+        const response = await fetch(`http://gringo.operas.pt:8000/kickLobby?token=${localStorage.getItem("token")}&lobbyname=${roomID}&username=${name}`, {
             method: 'POST'
         });
 
@@ -43,7 +43,7 @@ const LobbyInfo = ({ roomID, players }) => {
     }
 
     const handleReady = async () => {
-        const response = await fetch(`http://192.168.32.219:8000/readyLobby?token=${localStorage.getItem("token")}&lobbyname=${roomID}`, {
+        const response = await fetch(`http://gringo.operas.pt:8000/readyLobby?token=${localStorage.getItem("token")}&lobbyname=${roomID}`, {
             method: 'POST'
         });
 
