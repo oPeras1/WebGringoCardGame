@@ -103,7 +103,7 @@ async def prepareLobby(lobbyname):
 
     if lobby["state"] == "Countdown":
         lobby["state"] = "Game"
-        await notify_lobby(lobbyname, "Game started!")
+        await notify_lobby(lobbyname, notify_lobby(lobbyname, {"id": 4}))
 
 async def sendListPlayers(lobbyname):
     lobby = lobbies[lobbyname]
@@ -121,7 +121,7 @@ async def sendListPlayers(lobbyname):
         owner = False
         if player == lobby["owner"]:
             owner = True
-        data["players"].append({"name": player, "avatar": users[player]["id"], "owner": owner, "ready": players[player]['ready']})
+        data["players"].append({"name": player, "avatar": users[player]["id"], "owner": owner})
         data["ready"].append({player: players[player]['ready']})
 
     data = json.dumps(data)
@@ -136,11 +136,13 @@ async def sendReadyPlayers(lobbyname):
     data = {}
     data["id"] = 2
     data["numReady"] = numReady(lobby)
-    data["ready"] = []
+    data["ready"] = {}
 
     for player in players:
         name = player
-        data["ready"].append({name: players[player]['ready']})
+        data["ready"][name]= players[player]['ready']
+    
+    data = json.dumps(data)
 
     await notify_lobby(lobbyname, data)
 
@@ -238,11 +240,11 @@ async def readyLobby(token: str, lobbyname: str, background_tasks: BackgroundTas
 
         numReadyLobby = numReady(lobby)
         numPlayersLobby = numPlayers(lobby)
-
+   
         await sendReadyPlayers(lobbyname)
 
         if numReadyLobby == numPlayersLobby:
-            await notify_lobby(lobbyname, f"Everyone is ready! ({numReadyLobby}/{numPlayersLobby})")
+            await notify_lobby(lobbyname, {"id": 3})
 
 
             background_tasks.add_task(prepareLobby, lobbyname) 
@@ -266,7 +268,7 @@ async def readyLobby(token: str, lobbyname: str, id: int):
                 card = deck.pop()
                 players[username]['deck'][id] = card
 
-                # Notify all players in the lobby
+                # Notify all players in the lobby. MAYBE NOT ALL, JUST THE PLAYER WHO REVEALED AND WICH CARD IS IT
                 await notify_lobby(lobbyname, f"User {username} has revealed a card")
             else:
                 await notify_lobby(lobbyname, f"Deck is empty")
