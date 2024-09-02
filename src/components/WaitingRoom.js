@@ -4,11 +4,14 @@ import "../assets/WaitingRoom.css";
 
 import LobbyInfo from './subcomponents/LobbyInfo';
 
+const url = "127.0.0.1:8000"
+
 const Waiting = () => {
     const { roomID } = useParams();
     const [ws, setWs] = useState(null);
     const [messages, setMessages] = useState([]);
     const [players, setPlayers] = useState([{name: localStorage.getItem("username") + " (Owner 👑)", avatar: localStorage.getItem("id")}]);
+    const [readyStatus, setReadyStatus] = useState({});
     const token = localStorage.getItem('token');
 
     useEffect(() => {
@@ -21,7 +24,7 @@ const Waiting = () => {
             ws.close();
         }
         
-        const socket = new WebSocket(`ws://gringo.operas.pt:8000/ws/${roomID}/${token}`);
+        const socket = new WebSocket("ws://" + url + `/ws/${roomID}/${token}`);
 
         socket.onopen = () => {
             console.log('Connected to WebSocket');
@@ -32,10 +35,14 @@ const Waiting = () => {
             const data = JSON.parse(event.data)
 
             if (data.id === 1) { 
-                const dataplayers = data.players
-                const dataready = data.ready
-
-                setPlayers(dataplayers)
+                setPlayers(data.players);
+                setReadyStatus(data.ready.reduce((acc, obj) => {
+                    const key = Object.keys(obj)[0];
+                    acc[key] = obj[key];
+                    return acc;
+                }, {}));
+            } else if (data.id === 2) {
+                setReadyStatus(data.ready);
             }
 
             setMessages((prevMessages) => [...prevMessages, event.data]);
@@ -59,7 +66,7 @@ const Waiting = () => {
 
     return (
         <div className="waiting-room">
-            <LobbyInfo roomID={roomID} players = {players} />
+            <LobbyInfo roomID={roomID} players = {players} readyStatus = {readyStatus} />
             <div>
                 <h2>WebSocket Messages:</h2>
                 <ul>

@@ -5,7 +5,6 @@
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: 'Arial', sans-serif;
 }
 
 .lobby-header h1 {
@@ -54,6 +53,11 @@
     padding: 0;
     cursor: pointer;
     transition: transform 0.5s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25px; /* Define o tamanho do botão para corresponder ao tamanho da imagem */
+    height: 25px; /* Define o tamanho do botão para corresponder ao tamanho da imagem */
 }
 
 .action-button:hover {
@@ -63,5 +67,8 @@
 .action-icon {
     width: 25px;
     height: 25px;
-    display: inline-block;
+}
+
+.kick {
+    margin-right: 10px;
 }
