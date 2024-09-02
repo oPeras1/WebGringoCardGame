@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import "../assets/WaitingRoom.css";
 
 import LobbyInfo from './subcomponents/LobbyInfo';
+import Chat from './subcomponents/Chat';
 
 const url = "127.0.0.1:8000"
 
@@ -67,14 +68,7 @@ const Waiting = () => {
     return (
         <div className="waiting-room">
             <LobbyInfo roomID={roomID} players = {players} readyStatus = {readyStatus} />
-            <div>
-                <h2>WebSocket Messages:</h2>
-                <ul>
-                    {messages.map((msg, index) => (
-                        <li key={index}>{msg}</li>
-                    ))}
-                </ul>
-            </div>
+            <Chat messages = {messages} />
         </div>
     );
 };
