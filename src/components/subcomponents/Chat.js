@@ -1,14 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { profilePics, chatIcons } from '../../utils/globals';
 import '../../assets/Chat.css';
 
-const chatIcons = ["/icons/open-chat.png", "/icons/close-chat.png"];
-
-const Chat = ({ messages }) => {
+const Chat = ({ chat, messages, enviaMensagem }) => {
     const [isChatVisible, setIsChatVisible] = useState(false);
+    const [cont, setCont] = useState("");
 
     const handleClose = () => {
         document.querySelector('.chat').classList.add('slide-out');
         setTimeout(() => setIsChatVisible(false), 400);
+    };
+
+    const handleSendMessage = () => {
+        if (cont.trim() !== "") {
+            enviaMensagem(cont);
+            setCont("");
+        }
     };
 
     return (
@@ -27,8 +34,18 @@ const Chat = ({ messages }) => {
                     </div>
                     <div className="chat-messages">
                         <ul>
-                            {messages.map((msg, index) => (
-                                <li key={index}>{msg}</li>
+                            {chat.map((chat, index) => (
+                                <li key={index} className="message">
+                                    <img src={profilePics[chat.id]} alt={`${chat.author} Avatar`} />
+                                    <h3>{chat.author}</h3>
+                                    <p>{chat.content}</p>
+                                </li>
+                            ))}
+                        </ul>
+                        <ul>
+                            { /* Depois tira-se */ }
+                            {messages.map((message, index) => (
+                                <li key={index}>{message}</li>
                             ))}
                         </ul>
                     </div>
@@ -36,9 +53,11 @@ const Chat = ({ messages }) => {
                         <input 
                             type="text" 
                             placeholder="Type a message..."
-                            className = "nome-txt"
+                            className="nome-txt"
+                            value={cont}
+                            onChange={(event) => setCont(event.target.value)}
                         />
-                        <button>Send</button>
+                        <button onClick={handleSendMessage}>Send</button>
                     </div>
                 </div>
             )}

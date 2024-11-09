@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { API } from '../utils/globals';
 import { useParams } from 'react-router-dom';
 import "../assets/WaitingRoom.css";
 
 import LobbyInfo from './subcomponents/LobbyInfo';
 import Chat from './subcomponents/Chat';
 
-const url = "127.0.0.1:8000"
-
 const Waiting = () => {
     const { roomID } = useParams();
     const [ws, setWs] = useState(null);
+    const [chat, setChat] = useState([]);
     const [messages, setMessages] = useState([]);
     const [players, setPlayers] = useState([{name: localStorage.getItem("username") + " (Owner 👑)", avatar: localStorage.getItem("id")}]);
     const [readyStatus, setReadyStatus] = useState({});
     const token = localStorage.getItem('token');
+
+
+    const handleMensagem = async (content) => {
+        const response = await fetch("http://" + API + `/sendMessage?token=${token}&message=${content}&id=${localStorage.getItem("id")}`, {
+            method: 'POST'
+        });
+
+        const data = await response.json();
+        setChat((prevChat) => [...prevChat, data.message]);
+    }
 
     useEffect(() => {
         if (!token) {
@@ -25,7 +35,7 @@ const Waiting = () => {
             ws.close();
         }
         
-        const socket = new WebSocket("ws://" + url + `/ws/${roomID}/${token}`);
+        const socket = new WebSocket("ws://" + API + `/ws/${roomID}/${token}`);
 
         socket.onopen = () => {
             console.log('Connected to WebSocket');
@@ -44,6 +54,11 @@ const Waiting = () => {
                 }, {}));
             } else if (data.id === 2) {
                 setReadyStatus(data.ready);
+            }
+
+            if (data.message) {
+                console.log(data.message);
+                setChat((prevChat) => [...prevChat, data.message]);
             }
 
             setMessages((prevMessages) => [...prevMessages, event.data]);
@@ -68,7 +83,7 @@ const Waiting = () => {
     return (
         <div className="waiting-room">
             <LobbyInfo roomID={roomID} players = {players} readyStatus = {readyStatus} />
-            <Chat messages = {messages} />
+            <Chat chat = {chat} messages = {messages} enviaMensagem = {(content) => handleMensagem(content)}/>
         </div>
     );
 };

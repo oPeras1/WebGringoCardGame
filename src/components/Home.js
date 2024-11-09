@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
+import { profilePics, API } from '../utils/globals';
 import '../assets/Home.css';
 import { useNavigate } from 'react-router-dom';
-
-const profilepics = [
-    "/img/pfp/profile1.jpg",
-    "/img/pfp/profile2.jpg",
-    "/img/pfp/profile3.jpg",
-    "/img/pfp/profile4.jpg",
-    "/img/pfp/profile5.jpg",
-    "/img/pfp/profile6.jpg",
-    "/img/pfp/profile7.jpg",
-    "/img/pfp/profile8.jpg",
-    "/img/pfp/profile9.jpg",
-]
-
-const url = "127.0.0.1:8000"
 
 
 const Home = () => {
@@ -25,7 +12,7 @@ const Home = () => {
     const navigate = useNavigate();
 
     const handleClickPfp = () => {
-        setUserpf((userpf) => (userpf + 1) % profilepics.length);
+        setUserpf((userpf) => (userpf + 1) % profilePics.length);
     }
 
     const handleChangeName = (event) => {
@@ -34,7 +21,7 @@ const Home = () => {
 
     const handleClickName = async () => {
         if (username.length > 0) {
-            const response = await fetch("http://" + url + `/setUsername?username=${encodeURIComponent(username)}&id=${userpf}`, {
+            const response = await fetch("http://" + API + `/setUsername?username=${encodeURIComponent(username)}&id=${userpf}`, {
                 method: 'POST'
             });
 
@@ -54,7 +41,7 @@ const Home = () => {
     }
 
     const handleClickCreate = async () => {
-        const response = await fetch("http://" + url + `/createLobby?token=${localStorage.getItem("token")}`, {
+        const response = await fetch("http://" + API + `/createLobby?token=${localStorage.getItem("token")}`, {
             method: 'POST'
         });
 
@@ -72,7 +59,7 @@ const Home = () => {
 
     const handleLobbyName = async () => {
         if (lobbyname.length > 0) {
-            const response = await fetch("http://" + url + `/joinLobby?token=${localStorage.getItem("token")}&lobbyname=${lobbyname.toUpperCase()}`, {
+            const response = await fetch("http://" + API + `/joinLobby?token=${localStorage.getItem("token")}&lobbyname=${lobbyname.toUpperCase()}`, {
                 method: 'POST'
             });
         
@@ -93,7 +80,7 @@ const Home = () => {
             <div className="home-form">
                 <h1 className = "titjogo">Gringo!</h1>
                 <div className = "profile-container">
-                    <img src = {profilepics[userpf]} alt="Profile" className = "profile"/>
+                    <img src = {profilePics[userpf]} alt="Profile" className = "profile"/>
                     <button onClick={handleClickPfp} className="switch-button">&#8635;</button>
                 </div>
                 <div className = "nome-container">
