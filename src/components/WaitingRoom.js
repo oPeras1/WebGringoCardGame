@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { API } from '../utils/globals';
 import { useParams } from 'react-router-dom';
 import "../assets/WaitingRoom.css";
+import "../assets/FanCard.scss";
 
 import LobbyInfo from './subcomponents/LobbyInfo';
 import Chat from './subcomponents/Chat';
@@ -17,12 +18,9 @@ const Waiting = () => {
 
 
     const handleMensagem = async (content) => {
-        const response = await fetch("http://" + API + `/sendMessage?token=${token}&message=${content}&id=${localStorage.getItem("id")}`, {
+        await fetch("http://" + API + `/sendMessage?lobbyname=${roomID}&token=${token}&message=${content}&id=${localStorage.getItem("id")}`, {
             method: 'POST'
         });
-
-        const data = await response.json();
-        setChat((prevChat) => [...prevChat, data.message]);
     }
 
     useEffect(() => {
@@ -54,10 +52,7 @@ const Waiting = () => {
                 }, {}));
             } else if (data.id === 2) {
                 setReadyStatus(data.ready);
-            }
-
-            if (data.message) {
-                console.log(data.message);
+            } else if (data.id == 3) {
                 setChat((prevChat) => [...prevChat, data.message]);
             }
 
@@ -83,6 +78,12 @@ const Waiting = () => {
     return (
         <div className="waiting-room">
             <LobbyInfo roomID={roomID} players = {players} readyStatus = {readyStatus} />
+            <div class="col-auto">
+                <p>.fan-right-center</p>
+                <div class="card-deck fan-right-center">
+                    <div class="card"></div>
+                </div>
+            </div>
             <Chat chat = {chat} messages = {messages} enviaMensagem = {(content) => handleMensagem(content)}/>
         </div>
     );

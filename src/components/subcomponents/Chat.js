@@ -12,7 +12,7 @@ const Chat = ({ chat, messages, enviaMensagem }) => {
     };
 
     const handleSendMessage = () => {
-        if (cont.trim() !== "") {
+        if (cont.trim() !== "" && cont.length <= 650) {
             enviaMensagem(cont);
             setCont("");
         }
@@ -36,8 +36,10 @@ const Chat = ({ chat, messages, enviaMensagem }) => {
                         <ul>
                             {chat.map((chat, index) => (
                                 <li key={index} className="message">
-                                    <img src={profilePics[chat.id]} alt={`${chat.author} Avatar`} />
-                                    <h3>{chat.author}</h3>
+                                    <div className="message-header">
+                                        <img src={profilePics[chat.id]} alt={`${chat.author} Avatar`} />
+                                        <h3>{chat.author}</h3>
+                                    </div>
                                     <p>{chat.content}</p>
                                 </li>
                             ))}
@@ -56,6 +58,7 @@ const Chat = ({ chat, messages, enviaMensagem }) => {
                             className="nome-txt"
                             value={cont}
                             onChange={(event) => setCont(event.target.value)}
+                            maxLength={650}
                         />
                         <button onClick={handleSendMessage}>Send</button>
                     </div>

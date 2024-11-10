@@ -1,0 +1,89 @@
+$duration: 200ms;
+
+@mixin card-deck-animation($origin, $card1, $card2, $card3) {
+  &, >.card, >.card:before, >.card:after {
+    transform-origin: $origin;
+  }
+
+  &:hover {
+    transform: $card1;
+    >.card {
+      &:before {
+        transform: $card2;
+      }
+
+      &:after {
+        transform: $card3;
+      }
+    }
+  }
+}
+
+body {
+  background: url('https://media.istockphoto.com/photos/seamless-dark-green-felt-background-picture-id1044409406?k=6&m=1044409406&s=612x612&w=0&h=FdFCgmbkcdnc3XjioghmHls63kPElxQDRdHZ14o0pyY=');
+}
+
+hr {
+  border-color: white;
+}
+
+.vh-100 {
+  height: 100vh;
+}
+
+.shadow { 
+  box-shadow: 0 0 15px rgba(0,0,0, 0.5);
+}
+
+.card-deck {
+  position: relative;
+  width: 275px; 
+  height: 350px;
+  margin: 0 0.25rem 3rem;
+  transition: transform $duration ease-in-out;
+  flex: 0 0 auto;
+  
+  >.card {
+    background-image: url('https://opengameart.org/sites/default/files/card%20back%20orange.png');
+    background-size: cover;
+    
+    &, &:before, &:after {
+      border-radius: .5rem;
+      transition: transform $duration ease-in-out, opacity $duration ease-in-out;
+      @extend .shadow;
+      background-position: center;
+    }
+    
+    &:before, &:after {
+      background-image: url('https://media.istockphoto.com/photos/queen-of-clubs-isolated-picture-id186683534?k=6&m=186683534&s=612x612&w=0&h=A0ca-XzDLPQp0M5Hd2LNx_GVufxBBh49Wg_kNkKuD2Q=');
+      background-size: 112%;
+      content: '';
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+    }
+    
+    &:before {
+      z-index: -1;
+    }
+    
+    &:after {
+      z-index: -2;
+    }
+  }
+  
+  &:hover {
+    >.card {
+      &, &:before, &:after {
+        opacity: 1;
+      }
+    }
+  }
+  
+  &.fan-right-center {
+    @include card-deck-animation(center, rotate(10deg) scale(1.05), rotate(-10deg) scale(0.95), rotate(-20deg) scale(0.85));
+  }
+}

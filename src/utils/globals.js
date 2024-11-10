@@ -21,4 +21,6 @@ export const chatIcons = [
     "/icons/close-chat.png"
 ];
 
+
+
 export const API = "gringo.operas.pt:8000";

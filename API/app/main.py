@@ -102,8 +102,13 @@ async def prepareLobby(lobbyname):
     await asyncio.sleep(5)
 
     if lobby["state"] == "Countdown":
+        lobby["state"] = "Revealing"
+        print("Revealing")
+        await notify_lobby(lobbyname, json.dumps({"id": 4, "message": "Revealing Cards"}))
+
+        await asyncio.sleep(15)
         lobby["state"] = "Game"
-        await notify_lobby(lobbyname, notify_lobby(lobbyname, {"id": 4}))
+        await notify_lobby(lobbyname, json.dumps({"id": 4, "message": "Game Started"}))
 
 async def sendListPlayers(lobbyname):
     lobby = lobbies[lobbyname]
@@ -252,7 +257,7 @@ async def readyLobby(token: str, lobbyname: str, background_tasks: BackgroundTas
     return {"readystate": readystate}
 
 @app.post("/revealCard")
-async def readyLobby(token: str, lobbyname: str, id: int):
+async def revealCard(token: str, lobbyname: str, id: int):
     username = get_user_from_token(token)
 
     if lobbyname not in lobbies:
@@ -261,22 +266,63 @@ async def readyLobby(token: str, lobbyname: str, id: int):
     lobby = lobbies[lobbyname]
     players = lobby["players"]
 
-    if username in players:
-        if lobby["state"] == "Game":
-            deck = lobby["deck"]
-            if len(deck) > 0:
-                card = deck.pop()
-                players[username]['deck'][id] = card
-
-                # Notify all players in the lobby. MAYBE NOT ALL, JUST THE PLAYER WHO REVEALED AND WICH CARD IS IT
-                await notify_lobby(lobbyname, f"User {username} has revealed a card")
-            else:
-                await notify_lobby(lobbyname, f"Deck is empty")
-
-    else:
+    if username not in players:
         raise HTTPException(status_code=404, detail="Player not in-game")
 
+    if lobby["state"] != "Revealing":
+        raise HTTPException(status_code=404, detail="Not in revealing state")
+    
+    deck = lobby["deck"]
+    if len(deck) <= 0:
+        raise HTTPException(status_code=404, detail="No more cards in the deck")
+    
+    revealed = 0
+    for card in players[username]['deck']:
+        if card != 0:
+            revealed += 1
+
+    if revealed > 2:
+        raise HTTPException(status_code=404, detail="All cards already revealed")
+
+    card = deck.pop()
+    players[username]['deck'][id] = card
+
+    # Notify all players in the lobby. MAYBE NOT ALL, JUST THE PLAYER WHO REVEALED AND WICH CARD IS IT
+    await notify_lobby(lobbyname, f"User {username} has revealed a card")
+
+    lobby["connections"][username].send_text({"id": 5, "card": card})
+
     return {"status": "Revealed"}
+
+@app.post("/sendMessage")
+async def sendMessage(lobbyname: str, token: str, message: str, id: int):
+    username = get_user_from_token(token)
+
+    if len(message) < 1 or len(message) > 650:
+        raise HTTPException(status_code=401, detail="Message must be between 1 and 650 characters")
+
+    if lobbyname not in lobbies:
+        raise HTTPException(status_code=404, detail="Lobby not found")
+    
+    if username not in lobbies[lobbyname]["players"]:
+        raise HTTPException(status_code=404, detail="Player not in the Lobby")
+
+    # Notify all players in the lobby
+    data = {}
+    data["id"] = 3
+    data["message"] = {
+        "author": username,
+        "content": message,
+        "id": id
+    }
+
+    
+
+    data = json.dumps(data)
+
+    await notify_lobby(lobbyname, data)
+
+    return {"chat": "New Message"}
 
 @app.websocket("/ws/{lobbycode}/{token}")
 async def websocket_endpoint(websocket: WebSocket, lobbycode: str, token: str):

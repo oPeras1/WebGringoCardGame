@@ -3,7 +3,6 @@ import { profilePics, API } from '../utils/globals';
 import '../assets/Home.css';
 import { useNavigate } from 'react-router-dom';
 
-
 const Home = () => {
     const [userpf, setUserpf] = useState(localStorage.getItem("id") || 0);
     const [username, setUsername] = useState(localStorage.getItem("username") || "");
@@ -20,7 +19,7 @@ const Home = () => {
     }
 
     const handleClickName = async () => {
-        if (username.length > 0) {
+        if (username.length > 0 && username.length <= 15) {
             const response = await fetch("http://" + API + `/setUsername?username=${encodeURIComponent(username)}&id=${userpf}`, {
                 method: 'POST'
             });
@@ -84,13 +83,13 @@ const Home = () => {
                     <button onClick={handleClickPfp} className="switch-button">&#8635;</button>
                 </div>
                 <div className = "nome-container">
-                    <input type="text" value = {username} onChange = {handleChangeName} placeholder = "Name" className = "nome-txt"/>
+                    <input type="text" value = {username} onChange = {handleChangeName} placeholder = "Name" className = "nome-txt" maxLength={15}/>
                     <button className = "nome-btn" onClick = {handleClickName}>SET</button>
                 </div>
                 {showButtons ? <div className = "lobby-container">
                     <button className = "create-btn" onClick = {handleClickCreate}>CREATE LOBBY</button>
                     <div className = "join-lobby-container">
-                        <input type="text" value = {lobbyname} onChange = {handleChangeLobby} placeholder = "Code" className = "lobby-txt"/>
+                        <input type="text" value = {lobbyname} onChange = {handleChangeLobby} placeholder = "Code" className = "lobby-txt" maxLength={5}/>
                         <button className = "nome-btn join-btn" onClick = {handleLobbyName}>JOIN LOBBY</button>
                     </div>
                 </div> : <></>}
